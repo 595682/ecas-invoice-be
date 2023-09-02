@@ -1,0 +1,29 @@
+{
+  "kind": "collectionType",
+  "collectionName": "accounting_categories",
+  "info": {
+    "singularName": "accounting-category",
+    "pluralName": "accounting-categories",
+    "displayName": "AccountingCategory",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "type": {
+      "type": "enumeration",
+      "enum": [
+        "income",
+        "expense"
+      ]
+    },
+    "subtype": {
+      "type": "string"
+    }
+  }
+}

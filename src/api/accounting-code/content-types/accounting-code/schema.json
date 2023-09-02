@@ -1,0 +1,31 @@
+{
+  "kind": "collectionType",
+  "collectionName": "accounting_codes",
+  "info": {
+    "singularName": "accounting-code",
+    "pluralName": "accounting-codes",
+    "displayName": "AccountingCode",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "accountingCode": {
+      "type": "string"
+    },
+    "accountingName": {
+      "type": "string"
+    },
+    "accountingCategory": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::accounting-category.accounting-category"
+    },
+    "enabled": {
+      "type": "boolean",
+      "default": true
+    }
+  }
+}

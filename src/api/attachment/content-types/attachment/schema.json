@@ -1,0 +1,31 @@
+{
+  "kind": "collectionType",
+  "collectionName": "attachments",
+  "info": {
+    "singularName": "attachment",
+    "pluralName": "attachments",
+    "displayName": "Attachment"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "documents": {
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ],
+      "type": "media",
+      "multiple": true
+    },
+    "title": {
+      "type": "string"
+    },
+    "needsToBeAttached": {
+      "type": "boolean"
+    }
+  }
+}

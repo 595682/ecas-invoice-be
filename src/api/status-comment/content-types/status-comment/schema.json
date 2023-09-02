@@ -1,0 +1,36 @@
+{
+  "kind": "collectionType",
+  "collectionName": "status_comments",
+  "info": {
+    "singularName": "status-comment",
+    "pluralName": "status-comments",
+    "displayName": "statusComment",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "previousStatus": {
+      "type": "string"
+    },
+    "nextStatus": {
+      "type": "string"
+    },
+    "comment": {
+      "type": "text"
+    },
+    "requestedBy": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "completed": {
+      "type": "boolean"
+    },
+    "response": {
+      "type": "text"
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "kind": "collectionType",
+  "collectionName": "project_accounts",
+  "info": {
+    "singularName": "project-account",
+    "pluralName": "project-accounts",
+    "displayName": "projectAccount",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "accountUsed": {
+      "type": "string"
+    },
+    "code": {
+      "type": "string"
+    },
+    "project": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::project.project"
+    }
+  }
+}

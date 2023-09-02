@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_bdc_signatures",
+  "info": {
+    "displayName": "signatures",
+    "icon": "pencil"
+  },
+  "options": {},
+  "attributes": {
+    "signee": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "signed": {
+      "type": "boolean",
+      "default": false
+    },
+    "signatureDate": {
+      "type": "datetime"
+    }
+  }
+}

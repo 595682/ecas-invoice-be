@@ -1,0 +1,18 @@
+{
+  "collectionName": "components_settings_brands",
+  "info": {
+    "displayName": "brand",
+    "icon": "brush"
+  },
+  "options": {},
+  "attributes": {
+    "logo": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::attachment.attachment"
+    },
+    "projectName": {
+      "type": "string"
+    }
+  }
+}

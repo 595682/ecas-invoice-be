@@ -1,0 +1,27 @@
+{
+  "kind": "collectionType",
+  "collectionName": "expense_types",
+  "info": {
+    "singularName": "expense-type",
+    "pluralName": "expense-types",
+    "displayName": "expenseType",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "requiredAdditionalInfo": {
+      "type": "enumeration",
+      "enum": [
+        "string",
+        "creditCard",
+        "person"
+      ]
+    }
+  }
+}
