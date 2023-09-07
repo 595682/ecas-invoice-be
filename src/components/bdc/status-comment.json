@@ -1,27 +1,25 @@
 {
-  "kind": "collectionType",
-  "collectionName": "status_comments",
+  "collectionName": "components_bdc_status_comments",
   "info": {
-    "singularName": "status-comment",
-    "pluralName": "status-comments",
     "displayName": "statusComment",
-    "description": ""
+    "icon": "book"
   },
-  "options": {
-    "draftAndPublish": true
-  },
-  "pluginOptions": {},
+  "options": {},
   "attributes": {
+    "message": {
+      "type": "string"
+    },
     "comment": {
       "type": "text"
+    },
+    "completed": {
+      "type": "boolean",
+      "default": false
     },
     "person": {
       "type": "relation",
       "relation": "oneToOne",
       "target": "plugin::users-permissions.user"
-    },
-    "completed": {
-      "type": "boolean"
     },
     "status": {
       "type": "enumeration",
@@ -36,9 +34,6 @@
     },
     "date": {
       "type": "date"
-    },
-    "message": {
-      "type": "string"
     }
   }
 }

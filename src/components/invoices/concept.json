@@ -1,0 +1,28 @@
+{
+  "collectionName": "components_invoices_concepts",
+  "info": {
+    "displayName": "concept"
+  },
+  "options": {},
+  "attributes": {
+    "description": {
+      "type": "text"
+    },
+    "amount": {
+      "type": "float"
+    },
+    "invoiceReference": {
+      "type": "string"
+    },
+    "attachment": {
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ],
+      "type": "media",
+      "multiple": false
+    }
+  }
+}

@@ -17,11 +17,6 @@
       "relation": "oneToOne",
       "target": "plugin::users-permissions.user"
     },
-    "statusComments": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::status-comment.status-comment"
-    },
     "encodingNumber": {
       "type": "string"
     },
@@ -30,10 +25,10 @@
       "relation": "oneToOne",
       "target": "api::accounting-code.accounting-code"
     },
-    "project": {
+    "projectCode": {
       "type": "relation",
       "relation": "oneToOne",
-      "target": "api::project.project"
+      "target": "api::project-account.project-account"
     },
     "vatType": {
       "type": "enumeration",
@@ -95,16 +90,6 @@
       "type": "boolean",
       "default": false
     },
-    "annexes": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::attachment.attachment"
-    },
-    "concepts": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::concept.concept"
-    },
     "requiredSignatures": {
       "displayName": "signatures",
       "type": "component",
@@ -113,6 +98,29 @@
     },
     "isCompiling": {
       "type": "boolean"
+    },
+    "annexes": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "concepts": {
+      "displayName": "concept",
+      "type": "component",
+      "repeatable": true,
+      "component": "invoices.concept"
+    },
+    "statusComments": {
+      "displayName": "statusComment",
+      "type": "component",
+      "repeatable": true,
+      "component": "bdc.status-comment"
     }
   }
 }

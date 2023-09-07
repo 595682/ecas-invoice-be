@@ -2,7 +2,8 @@
   "collectionName": "components_bdc_signatures",
   "info": {
     "displayName": "signatures",
-    "icon": "pencil"
+    "icon": "pencil",
+    "description": ""
   },
   "options": {},
   "attributes": {
@@ -16,7 +17,7 @@
       "default": false
     },
     "signatureDate": {
-      "type": "datetime"
+      "type": "date"
     }
   }
 }
