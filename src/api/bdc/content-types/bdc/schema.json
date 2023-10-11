@@ -99,17 +99,6 @@
     "isCompiling": {
       "type": "boolean"
     },
-    "annexes": {
-      "type": "media",
-      "multiple": false,
-      "required": false,
-      "allowedTypes": [
-        "images",
-        "files",
-        "videos",
-        "audios"
-      ]
-    },
     "concepts": {
       "displayName": "concept",
       "type": "component",
@@ -121,6 +110,24 @@
       "type": "component",
       "repeatable": true,
       "component": "bdc.status-comment"
+    },
+    "expenseCategory": {
+      "type": "string"
+    },
+    "annex": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "seeBelow": {
+      "type": "boolean",
+      "default": false
     }
   }
 }

@@ -1,6 +1,7 @@
 /**
  * bdc controller
  */
+import jwt from "jsonwebtoken";
 
 import { factories } from "@strapi/strapi";
 const { errors } = require("@strapi/utils");
@@ -31,15 +32,25 @@ export default factories.createCoreController("api::bdc.bdc", ({ strapi }) => ({
     const attachments =
       foundBDC?.concepts?.map((concept) => concept.attachment) ?? [];
 
-    const attachmentLinks =
-      attachments.map((attachment) => attachment.url) ?? [];
+    // const attachmentLinks =
+    //   attachments.map((attachment) => attachment.url) ?? [];
+
+    const user = {
+      id: 1,
+    };
+
+    const token = jwt.sign(user, process.env.JWT_SECRET, {
+      expiresIn: "3600",
+    });
+
+    console.log(token, "token");
 
     const pdfBytes = await strapi
       .service("api::bdc.bdc")
-      .createDocument(attachmentLinks);
+      .createDocument(attachments, BDCId, token);
 
     const base64Data = pdfBytes.split(";base64,").pop();
-    const filename = "sample.pdf";
+    const filename = `bon_de_commande_${BDCId}.pdf`;
 
     ctx.set("Content-Disposition", `attachment; filename=${filename}`);
     ctx.type = "application/pdf";

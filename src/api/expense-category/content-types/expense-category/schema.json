@@ -1,0 +1,18 @@
+{
+  "kind": "collectionType",
+  "collectionName": "expense_categories",
+  "info": {
+    "singularName": "expense-category",
+    "pluralName": "expense-categories",
+    "displayName": "ExpenseCategory"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    }
+  }
+}

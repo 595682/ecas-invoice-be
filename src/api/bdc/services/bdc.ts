@@ -5,16 +5,17 @@
 const fs = require("fs/promises");
 const puppeteer = require("puppeteer");
 import { factories } from "@strapi/strapi";
-import { degrees, PageSizes, PDFDocument, rgb, StandardFonts } from "pdf-lib";
+import { PageSizes, PDFDocument } from "pdf-lib";
+import fetch from "node-fetch";
 
 module.exports = factories.createCoreService("api::bdc.bdc", ({ strapi }) => ({
-  async createDocument(attachmentUrls = []) {
+  async createDocument(attachmentUrls = [], id, token) {
     const pdfDoc = await PDFDocument.create();
 
     // Create a new page with A4 dimensions (210 x 297 mm)
     const a4Page = pdfDoc.addPage(PageSizes.A4);
     // Fetch the cover page screenshot with print CSS query
-    const screenshotUrl = "https://google.com"; // Replace with the URL you want to capture
+    const screenshotUrl = `http://127.0.0.1:8080/generateCover/${id}`; // Replace with the URL you want to capture
 
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
@@ -24,8 +25,16 @@ module.exports = factories.createCoreService("api::bdc.bdc", ({ strapi }) => ({
     // Set viewport to emulate "print" media type
     await page.emulateMediaType("print");
 
+    await page.setExtraHTTPHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
     await page.goto(screenshotUrl, {
-      waitUntil: "networkidle2", // Wait until no more than 2 network connections are active
+      waitUntil: "networkidle0",
+    });
+
+    await page.reload({
+      waitUntil: "networkidle0",
     });
 
     // Capture the screenshot of the entire page
@@ -44,14 +53,6 @@ module.exports = factories.createCoreService("api::bdc.bdc", ({ strapi }) => ({
       height: PageSizes.A4[1], // A4 height in millimeters
     });
 
-    const attachmentPDFs = await Promise.all(
-      attachmentUrls.map(async (attachmentUrl) => {
-        const _attachmentData = await fs.readFile(`public${attachmentUrl}`);
-        const _attachmentDoc = await PDFDocument.load(_attachmentData);
-        return _attachmentDoc;
-      })
-    );
-
     const mergedDoc = await PDFDocument.create();
     const copiedCoverPages = await mergedDoc.copyPages(
       pdfDoc,
@@ -59,21 +60,47 @@ module.exports = factories.createCoreService("api::bdc.bdc", ({ strapi }) => ({
     );
     copiedCoverPages.forEach((page) => mergedDoc.addPage(page));
 
-    await Promise.all(
-      attachmentPDFs.map(async (attachmentPDF) => {
-        const copiedAttachmentPages = await mergedDoc.copyPages(
-          attachmentPDF,
-          attachmentPDF.getPageIndices()
+    const attachmentPromises = attachmentUrls.map(async (attachmentData) => {
+      if (attachmentData.ext === ".pdf") {
+        const _attachmentData = await fs.readFile(
+          `public${attachmentData.url}`
         );
-        copiedAttachmentPages.forEach((page) => mergedDoc.addPage(page));
-      })
-    );
+        const _attachmentDoc = await PDFDocument.load(_attachmentData);
+        const copiedAttachmentPages = await mergedDoc.copyPages(
+          _attachmentDoc,
+          _attachmentDoc.getPageIndices()
+        );
+        return copiedAttachmentPages.forEach((page) => mergedDoc.addPage(page));
+      } else if (
+        attachmentData.ext === ".jpg" ||
+        attachmentData.ext === ".png"
+      ) {
+        // Embed images
+        const _imageBytes = await fetch(
+          `${process.env.CLIENT_URL}${attachmentData.url}`
+        ).then((res) => res.arrayBuffer());
 
-    // const copiedPagesB = await mergedDoc.copyPages(
-    //   attachmentDoc,
-    //   attachmentDoc.getPageIndices()
-    // );
-    // copiedPagesB.forEach((page) => mergedDoc.addPage(page));
+        let embeddedImage;
+
+        if (attachmentData.ext === ".jpg") {
+          embeddedImage = await mergedDoc.embedJpg(_imageBytes);
+        }
+        if (attachmentData.ext === ".png") {
+          embeddedImage = await mergedDoc.embedPng(_imageBytes);
+        }
+
+        const page = mergedDoc.addPage(PageSizes.A4);
+
+        page.drawImage(embeddedImage, {
+          x: 0,
+          y: 0,
+          width: PageSizes.A4[0], // A4 width in millimeters
+          height: PageSizes.A4[1], // A4 height in millimeters
+        });
+      }
+    });
+
+    await Promise.all(attachmentPromises);
 
     const pdfBytes = await mergedDoc.saveAsBase64({ dataUri: true });
 

@@ -17,6 +17,11 @@
     },
     "projectType": {
       "type": "string"
+    },
+    "approver": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
     }
   }
 }
