@@ -7,8 +7,15 @@ import { factories } from "@strapi/strapi";
 const { errors } = require("@strapi/utils");
 
 export default factories.createCoreController("api::bdc.bdc", ({ strapi }) => ({
-  async exampleAction(ctx) {
+  async exportbdc(ctx) {
     const BDCId = ctx.params.id;
+    const isAuthenticated = !!ctx.state.user;
+
+    const requestHost = ctx.request.host;
+
+    if (!isAuthenticated) {
+      throw new errors.ForbiddenError("User is not authenticated!");
+    }
 
     if (!BDCId) {
       throw new errors.ValidationError("Missing id param from the request!");
@@ -36,18 +43,16 @@ export default factories.createCoreController("api::bdc.bdc", ({ strapi }) => ({
     //   attachments.map((attachment) => attachment.url) ?? [];
 
     const user = {
-      id: 1,
+      id: ctx.state.user.id,
     };
 
     const token = jwt.sign(user, process.env.JWT_SECRET, {
       expiresIn: "3600",
     });
 
-    console.log(token, "token");
-
     const pdfBytes = await strapi
       .service("api::bdc.bdc")
-      .createDocument(attachments, BDCId, token);
+      .createDocument(attachments, BDCId, token, requestHost);
 
     const base64Data = pdfBytes.split(";base64,").pop();
     const filename = `bon_de_commande_${BDCId}.pdf`;
