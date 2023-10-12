@@ -11,7 +11,11 @@ export default factories.createCoreController("api::bdc.bdc", ({ strapi }) => ({
     const BDCId = ctx.params.id;
     const isAuthenticated = !!ctx.state.user;
 
-    const requestHost = ctx.request.host;
+    console.log(ctx.request);
+
+    const requestOrigin = ctx.request.header.origin;
+
+    console.log(requestOrigin);
 
     if (!isAuthenticated) {
       throw new errors.ForbiddenError("User is not authenticated!");
@@ -52,7 +56,7 @@ export default factories.createCoreController("api::bdc.bdc", ({ strapi }) => ({
 
     const pdfBytes = await strapi
       .service("api::bdc.bdc")
-      .createDocument(attachments, BDCId, token, requestHost);
+      .createDocument(attachments, BDCId, token, requestOrigin);
 
     const base64Data = pdfBytes.split(";base64,").pop();
     const filename = `bon_de_commande_${BDCId}.pdf`;

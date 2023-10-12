@@ -4,20 +4,26 @@
 
 const fs = require("fs/promises");
 const puppeteer = require("puppeteer");
+const locateChrome = require("locate-chrome");
 import { factories } from "@strapi/strapi";
 import { PageSizes, PDFDocument } from "pdf-lib";
 import fetch from "node-fetch";
 
 module.exports = factories.createCoreService("api::bdc.bdc", ({ strapi }) => ({
-  async createDocument(attachments = [], id, token, requestHost) {
+  async createDocument(attachments = [], id, token, requestOrigin) {
     const pdfDoc = await PDFDocument.create();
 
     // Create a new page with A4 dimensions (210 x 297 mm)
     const a4Page = pdfDoc.addPage(PageSizes.A4);
     // Fetch the cover page screenshot with print CSS query
-    const screenshotUrl = `${requestHost}/generateCover/${id}`; // Replace with the URL you want to capture
+    const screenshotUrl = `${requestOrigin}/generateCover/${id}`; // Replace with the URL you want to capture
 
-    const browser = await puppeteer.launch();
+    console.log(screenshotUrl);
+
+    const executablePath = await new Promise((resolve) =>
+      locateChrome((arg) => resolve(arg))
+    );
+    const browser = await puppeteer.launch({ headless: "new", executablePath });
     const page = await browser.newPage();
 
     await page.setViewport({ width: 794, height: 1123 });
