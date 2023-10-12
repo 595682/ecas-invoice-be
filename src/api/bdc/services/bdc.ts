@@ -4,7 +4,6 @@
 
 const fs = require("fs/promises");
 const puppeteer = require("puppeteer");
-const locateChrome = require("locate-chrome");
 import { factories } from "@strapi/strapi";
 import { PageSizes, PDFDocument } from "pdf-lib";
 import fetch from "node-fetch";
@@ -20,10 +19,7 @@ module.exports = factories.createCoreService("api::bdc.bdc", ({ strapi }) => ({
 
     console.log(screenshotUrl);
 
-    const executablePath = await new Promise((resolve) =>
-      locateChrome((arg) => resolve(arg))
-    );
-    const browser = await puppeteer.launch({ headless: "new", executablePath });
+    const browser = await puppeteer.launch({ headless: "new" });
     const page = await browser.newPage();
 
     await page.setViewport({ width: 794, height: 1123 });
